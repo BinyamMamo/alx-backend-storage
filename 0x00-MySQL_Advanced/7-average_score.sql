@@ -28,6 +28,6 @@ BEGIN
     UPDATE users
     SET average_score = @average_score
     WHERE id = user_id;
-END;
+END //
 
 DELIMITER ;
