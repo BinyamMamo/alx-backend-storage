@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+"""
+Task 12 - Log stats
+Write a Python script that provides some
+stats about Nginx logs stored in MongoDB
+"""
 def nginx_logs_stats(mongo_collection):
     """
     Provides statistics about Nginx logs stored in a MongoDB collection.
