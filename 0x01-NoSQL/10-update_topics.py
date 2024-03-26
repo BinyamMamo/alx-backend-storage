@@ -20,5 +20,5 @@ def update_topics(mongo_collection, name, topics):
             return str(doc["_id"])
         else:
             return None
-    except Exception as e:
+    except Exception:
         return None
