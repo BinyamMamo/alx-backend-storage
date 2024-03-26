@@ -1,4 +1,4 @@
 // Task 6 - Update
 // Write a script that adds a new attribute
 // to a document in the collection school
-db.updateOne({name: "Holberton school"}, {$set: {address: "972 Mission street"}})
+db.school.updateOne({name: "Holberton school"}, {$set: {address: "972 Mission street"}})
