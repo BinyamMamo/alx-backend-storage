@@ -10,15 +10,7 @@ def update_topics(mongo_collection, name, topics):
     """
      Update topics for a user
     """
-    try:
-        query = {"name": name}
-        doc = mongo_collection.find_one(query)
-
-        if doc:
-            update = {"$set": {"topics": topics}}
-            mongo_collection.update_one(query, update)
-            return str(doc["_id"])
-        else:
-            return None
-    except Exception:
-        return None
+    mongo_collection.update_many(
+        {'name': name},
+        {'$set': {'topics': topics}}
+    )
