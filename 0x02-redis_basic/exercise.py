@@ -6,6 +6,7 @@ and create a store method that accepts data, generates
 a key, stores data, and returns the key.
 """
 from redis import Redis
+from typing import Union
 import uuid
 
 
@@ -20,7 +21,7 @@ class Cache():
         self._redis = Redis()
         self._redis.flushdb()
 
-    def store(self, data):
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """
          Store data in redis.
         """
