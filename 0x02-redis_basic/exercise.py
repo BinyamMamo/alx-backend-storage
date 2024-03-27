@@ -14,7 +14,7 @@ class Cache():
     """
     implements the cache
     """
-    def __init__(self):
+    def __init__(self) -> None:
         """
          Initialize the Redis instance. This is called by __init__
         """
