@@ -6,7 +6,6 @@ and create a store method that accepts data, generates
 a key, stores data, and returns the key.
 """
 import uuid
-from redis import Redis
 from typing import Union
 
 
@@ -19,7 +18,8 @@ class Cache:
         """
          Initialize the Redis instance. This is called by __init__
         """
-        self._redis = Redis()
+        import redis
+        self._redis = redis.Redis()
         self._redis.flushdb(True)
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
@@ -27,5 +27,5 @@ class Cache:
          Store data in redis.
         """
         key = str(uuid.uuid4())
-        self._redis.mset({key: data})
+        self._redis.set(key, data)
         return key
