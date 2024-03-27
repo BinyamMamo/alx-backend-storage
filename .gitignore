@@ -1,4 +1,6 @@
 # directories
+__pycache__
 
 # files
 0x00-MySQL_Advanced/metal_bands.sql
+main.py
