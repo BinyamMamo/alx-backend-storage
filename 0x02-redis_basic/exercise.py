@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
-Task 0. Writing strings to Redis
-Create a Cache class, initialize _redis, flush it,
-and create a store method that accepts data, generates
-a key, stores data, and returns the key.
+Task 0 - 4 : Redis basics
 """
 import uuid
 from typing import Union
@@ -21,6 +18,29 @@ class Cache:
         import redis
         self._redis = redis.Redis()
         self._redis.flushdb(True)
+
+    def get(self, key: str, fn: callable) -> Union[str, bytes, int, float]:
+        """
+        Gets the value from Redis for the given key.
+        """
+        value = self._redis.get(key)
+        if value is None:
+            return None
+        if fn:
+            value = fn(value)
+        return value
+
+    def get_int(self, key: str) -> int:
+        """
+        Gets the value from Redis for the given key as an integer.
+        """
+        return self.get(key, lambda d: int(d))
+
+    def get_str(self, key: str) -> str:
+        """
+        Gets the value from Redis for the given key as a string.
+        """
+        return self.get(key, lambda d: str(d))
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
