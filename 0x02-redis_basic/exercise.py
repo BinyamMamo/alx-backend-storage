@@ -10,10 +10,11 @@ from redis import Redis
 from typing import Union
 
 
-class Cache():
+class Cache:
     """
     implements the cache
     """
+
     def __init__(self) -> None:
         """
          Initialize the Redis instance. This is called by __init__
