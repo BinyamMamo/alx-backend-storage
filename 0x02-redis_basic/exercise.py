@@ -9,12 +9,11 @@ from functools import wraps
 
 def count_calls(method: Callable) -> Callable:
     """
-    a system to count how many
-    times methods of the Cache class are called.
+    A system to count how many times methods of the Cache class are called.
     """
 
     @wraps(method)
-    def wrapper(self, *args, **kwargs):
+    def wrapper(self, *args, **kwargs) -> None:
         """
         Wrapper decorator that counts calls to Cache methods.
         """
@@ -25,13 +24,13 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
-def call_history(method):
+def call_history(method: Callable) -> Callable:
     """
     Decorates a Cache method to track call history.
     """
 
     @wraps(method)
-    def wrapper(self, *args, **kwargs):
+    def wrapper(self, *args, **kwargs) -> None:
         """
         Tracks call inputs and outputs.
         """
@@ -50,13 +49,10 @@ def call_history(method):
     return wrapper
 
 
-def replay(method):
+def replay(method: Callable) -> None:
     """
     Replays the call history for a method.
     """
-
-    key_inputs = "{}:inputs".format(method.__qualname__)
-    key_outputs = "{}:outputs".format(method.__qualname__)
 
     if method is None or not hasattr(method, '__self__'):
         return
@@ -66,8 +62,10 @@ def replay(method):
     if not isinstance(cache, redis.Redis):
         return
 
-    inputs = cache._redis.lrange(key_inputs, 0, -1)
-    outputs = cache._redis.lrange(key_outputs, 0, -1)
+    key_inputs = "{}:inputs".format(method.__qualname__)
+    key_outputs = "{}:outputs".format(method.__qualname__)
+    inputs = cache.lrange(key_inputs, 0, -1)
+    outputs = cache.lrange(key_outputs, 0, -1)
 
     print("{} was called {} times:".format(method.__qualname__, len(inputs)))
     for inp, outp in zip(inputs, outputs):
