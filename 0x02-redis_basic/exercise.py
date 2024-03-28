@@ -69,7 +69,8 @@ def replay(method: Callable) -> None:
 
     print("{} was called {} times:".format(method.__qualname__, len(inputs)))
     for inp, outp in zip(inputs, outputs):
-        print("{} -> {}".format(inp.decode("utf-8"), outp.decode("utf-8")))
+        print("{}(*{}) -> {}".format(inp.decode("utf-8"),
+                                     outp.decode("utf-8")))
 
 
 class Cache:
