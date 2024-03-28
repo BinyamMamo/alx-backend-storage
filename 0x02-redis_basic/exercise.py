@@ -16,7 +16,7 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(self, *args, **kwargs):
         """
-        Wrapper
+        Wrapper decorator that counts calls to Cache methods.
         """
         key = method.__qualname__
         self._redis.incr(key)
@@ -26,8 +26,15 @@ def count_calls(method: Callable) -> Callable:
 
 
 def call_history(method):
+    """
+    Decorates a Cache method to track call history.
+    """
+
     @wraps(method)
     def wrapper(self, *args, **kwargs):
+        """
+        Tracks call inputs and outputs.
+        """
         key_inputs = "{}:inputs".format(method.__qualname__)
         key_outputs = "{}:outputs".format(method.__qualname__)
 
