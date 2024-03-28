@@ -58,7 +58,7 @@ def replay(method: Callable) -> None:
         return
 
     import redis
-    cache = redis.Redis()
+    cache = getattr(method.__self__, '_redis', None)
     if not isinstance(cache, redis.Redis):
         return
 
@@ -69,7 +69,8 @@ def replay(method: Callable) -> None:
 
     print("{} was called {} times:".format(method.__qualname__, len(inputs)))
     for inp, outp in zip(inputs, outputs):
-        print("{}(*{}) -> {}".format(inp.decode("utf-8"),
+        print("{}(*{}) -> {}".format(method.__qualname__,
+                                     inp.decode("utf-8"),
                                      outp.decode("utf-8")))
 
 
