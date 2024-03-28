@@ -3,6 +3,7 @@
 Task 5. Implementing an expiring web cache and tracker [ #Advanced ]
 Implement a get_page function (prototype: def get_page(url: str) -> str:)
 """
+import redis
 import requests
 from functools import wraps
 from typing import Callable
@@ -17,17 +18,19 @@ def track_access_count(func: Callable):
         """
         The wrapper function for caching the output.
         """
-        import redis
         cache = redis.Redis()
 
-        cache.incr(f"count:{url}")
-        cached_response = cache.get(f"cached:{url}")
+        cache_key = f"cached:{url}"
+        count_key = f"count:{url}"
+
+        cache.incr(count_key)
+        cached_response = cache.get(cache_key)
 
         if cached_response:
             return cached_response.decode('utf-8')
 
         result = func(url)
-        cache.setex(f"cached:{url}", 10, result)
+        cache.setex(cache_key, 10, result)
 
         return result
 
