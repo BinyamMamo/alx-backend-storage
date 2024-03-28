@@ -50,6 +50,30 @@ def call_history(method):
     return wrapper
 
 
+def replay(method):
+    """
+    Replays the call history for a method.
+    """
+
+    key_inputs = "{}:inputs".format(method.__qualname__)
+    key_outputs = "{}:outputs".format(method.__qualname__)
+
+    if method is None or not hasattr(method, '__self__'):
+        return
+
+    import redis
+    cache = getattr(method.__self__, '_redis', None)
+    if not isinstance(cache, redis.Redis):
+        return
+
+    inputs = cache._redis.lrange(key_inputs, 0, -1)
+    outputs = cache._redis.lrange(key_outputs, 0, -1)
+
+    print("{} was called {} times:".format(method.__qualname__, len(inputs)))
+    for inp, outp in zip(inputs, outputs):
+        print("{} -> {}".format(inp.decode("utf-8"), outp.decode("utf-8")))
+
+
 class Cache:
     """
     implements the cache
