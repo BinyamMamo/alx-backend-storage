@@ -21,17 +21,17 @@ def track_access_count(func: callable):
         The wrapper function for caching the output.
         """
 
-        cache.incr(f'count:{url}')
-        result = cache.get(f'result:{url}')
+        redis.incr(f"count:{url}")
+        cached_response = redis.get(f"cached:{url}")
 
-        if result:
-            return result.decode('utf-8')
+        if cached_response:
+            return cached_response.decode('utf-8')
 
         result = func(url)
-        cache.set(f'count:{url}', 0)
-        cache.setex(f'result:{url}', 10, result)
+        redis.setex(f"cached:{url}", 10, result)
 
         return result
+
     return wrapper
 
 
