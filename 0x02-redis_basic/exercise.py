@@ -58,7 +58,7 @@ def replay(method: Callable) -> None:
         return
 
     import redis
-    cache = getattr(method.__self__, '_redis', None)
+    cache = redis.Redis()
     if not isinstance(cache, redis.Redis):
         return
 
