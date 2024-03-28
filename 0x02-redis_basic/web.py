@@ -20,8 +20,8 @@ def track_access_count(func: Callable):
         """
         cache = redis.Redis()
 
-        cache_key = f"cached:{url}"
-        count_key = f"count:{url}"
+        cache_key = "cached:{}".format(url)
+        count_key = "count:{}".format(url)
 
         cache.incr(count_key)
         cached_response = cache.get(cache_key)
@@ -30,8 +30,8 @@ def track_access_count(func: Callable):
             return cached_response.decode('utf-8')
 
         result = func(url)
-        cache.set(f'count:{url}', 0)
-        cache.setex(f'result:{url}', 10, result)
+        cache.set("count:{}".format(url), 0)
+        cache.setex("result:{}".format(url), 10, result)
 
         return result
 
