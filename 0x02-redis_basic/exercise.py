@@ -3,7 +3,26 @@
 Task 0 - 4 : Redis basics
 """
 import uuid
-from typing import Union
+from typing import Union, Callable
+from functools import wraps
+
+
+def count_calls(method: Callable) -> Callable:
+    """
+    a system to count how many
+    times methods of the Cache class are called.
+    """
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """
+        Wrapper
+        """
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+
+    return wrapper
 
 
 class Cache:
@@ -19,14 +38,15 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb(True)
 
-    def get(self, key: str, fn: callable) -> Union[str, bytes, int, float]:
+    def get(self, key: str, fn: callable = None) ->\
+            Union[str, bytes, int, float]:
         """
         Gets the value from Redis for the given key.
         """
         value = self._redis.get(key)
         if value is None:
             return None
-        if fn:
+        if fn is not None:
             value = fn(value)
         return value
 
@@ -34,14 +54,15 @@ class Cache:
         """
         Gets the value from Redis for the given key as an integer.
         """
-        return self.get(key, lambda d: int(d))
+        return self.get(key, int)
 
     def get_str(self, key: str) -> str:
         """
         Gets the value from Redis for the given key as a string.
         """
-        return self.get(key, lambda d: str(d))
+        return self.get(key, str)
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """
          Store data in redis.
