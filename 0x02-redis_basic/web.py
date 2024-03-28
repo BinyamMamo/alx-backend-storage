@@ -30,7 +30,8 @@ def track_access_count(func: Callable):
             return cached_response.decode('utf-8')
 
         result = func(url)
-        cache.setex(cache_key, 10, result)
+        cache.set(f'count:{url}', 0)
+        cache.setex(f'result:{url}', 10, result)
 
         return result
 
