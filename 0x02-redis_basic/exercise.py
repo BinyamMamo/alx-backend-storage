@@ -85,7 +85,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb(True)
 
-    def get(self, key: str, fn: callable = None) ->\
+    def get(self, key: str, fn: Callable = None) ->\
             Union[str, bytes, int, float]:
         """
         Gets the value from Redis for the given key.

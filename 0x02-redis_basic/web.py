@@ -11,7 +11,7 @@ from typing import Callable
 cache = redis.Redis()
 
 
-def track_access_count(func: callable):
+def track_access_count(func: Callable):
     """
     Decorator to track URL access count
     """
